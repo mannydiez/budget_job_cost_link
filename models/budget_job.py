@@ -51,8 +51,9 @@ class job_costing_planned_amount_comparison(models.Model):
 
 		if vals.get('analytic_id'):
 			log.critical('analytic_id = {}'.format(vals['analytic_id']))
-			for record_acc in vals['analytic_id'].product_budget_lines:
-				if vals['analytic_id'].product_budget_lines:
+			analytic_obj = self.env['account.analytic.account'].browse(vals['analytic_id'])
+			for record_acc in analytic_obj.product_budget_lines:
+				if analytic_obj.product_budget_lines:
 					for record_job in list_of_objects:
 						log.warning('{} == {}'.format(record_job['group_product_id'],record_acc['group_product_id'].id))
 						if record_job['group_product_id'] == record_acc['group_product_id'].id:
@@ -61,6 +62,7 @@ class job_costing_planned_amount_comparison(models.Model):
 								raise Warning('{} exceeded! {} (job cost sheet) > {} (account.analytic)'.format(record_job['group_product_id'].name,record_job['total_cost'],record_acc['total_cost']))
 				else:
 					raise Warning('No budget lines found!')
+					
 		res = super(job_costing_planned_amount_comparison,self).create(vals)
 		return res
 
@@ -107,8 +109,9 @@ class job_costing_planned_amount_comparison(models.Model):
 
 		if vals.get('analytic_id'):
 			log.critical('analytic_id = {}'.format(vals['analytic_id']))
-			for record_acc in vals['analytic_id'].product_budget_lines:
-				if vals['analytic_id'].product_budget_lines:
+			analytic_obj = self.env['account.analytic.account'].browse(vals['analytic_id'])
+			for record_acc in analytic_obj.product_budget_lines:
+				if analytic_obj.product_budget_lines:
 					for record_job in list_of_objects:
 						log.warning('{} == {}'.format(record_job['group_product_id'],record_acc['group_product_id'].id))
 						if record_job['group_product_id'] == record_acc['group_product_id'].id:
