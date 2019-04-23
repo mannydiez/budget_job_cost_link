@@ -3,7 +3,7 @@
 from odoo import api, fields, models
 import logging 
 log = logging.getLogger(__name__)
-
+log.critical('sadjkaoishduaishd')
 class job_costing_planned_amount_comparison(models.Model):
 	_inherit = 'job.costing'
 
