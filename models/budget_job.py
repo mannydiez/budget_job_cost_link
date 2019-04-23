@@ -13,11 +13,11 @@ class job_costing_planned_amount_comparison(models.Model):
 
 
 		if vals.get('job_cost_line_ids'):
-			log.critical('job_cost_line_ids = {}'.format(job_cost_line_ids))
+			log.critical('job_cost_line_ids = {}'.format(vals['job_cost_line_ids']))
 			list_of_objects = vals['job_cost_line_ids']
 		log.critical('list_of_objects = {}'.format(list_of_objects))
 		if vals.get('job_labour_line_ids'):
-			log.critical('job_labour_line_ids = {}'.format(job_labour_line_ids))
+			log.critical('job_labour_line_ids = {}'.format(vals['job_labour_line_ids']))
 			if list_of_objects:
 				for rec in list_of_objects:
 					for rec2 in vals['job_labour_line_ids']:
@@ -27,7 +27,7 @@ class job_costing_planned_amount_comparison(models.Model):
 				list_of_objects = vals['job_labour_line_ids']
 		log.critical('list_of_objects = {}'.format(list_of_objects))
 		if vals.get('job_subcon_line_ids'):
-			log.critical('job_subcon_line_ids = {}'.format(job_subcon_line_ids))
+			log.critical('job_subcon_line_ids = {}'.format(vals['job_subcon_line_ids']))
 			if list_of_objects:
 				for rec in list_of_objects:
 					for rec2 in vals['job_subcon_line_ids']:
@@ -45,7 +45,7 @@ class job_costing_planned_amount_comparison(models.Model):
 							rec['total_cost'] += rec2['total_cost']
 			else:
 				list_of_objects = vals['job_overhead_line_ids']
-			log.critical('job_overhead_line_ids = {}'.format(job_overhead_line_ids))
+			log.critical('job_overhead_line_ids = {}'.format(vals['job_overhead_line_ids']))
 			
 		log.critical('list_of_objects = {}'.format(list_of_objects))
 
