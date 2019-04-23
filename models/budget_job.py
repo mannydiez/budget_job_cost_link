@@ -177,7 +177,7 @@ class job_costing_planned_amount_comparison(models.Model):
 						if record_job[-1]['group_product_id'] == record_acc['group_product_id'].id:
 							log.warning('{} > {}'.format(record_job[-1]['total_cost'],record_acc['planned_amount']))
 							if record_job[-1]['total_cost'] > record_acc['planned_amount']:
-								raise Warning("{} exceeded! {} (job cost sheet) > {} (account.analytic)".format(record_acc.group_product_id.name,record_job[-1]['total_cost'],record_acc['planned_amount']))
+								raise Warning("{} exceeded!".format(record_acc.group_product_id.name))
 				else:
 					raise Warning('No budget lines found!')
 
