@@ -171,13 +171,13 @@ class job_costing_planned_amount_comparison(models.Model):
 			log.critical('analytic_id = {}'.format(vals['analytic_id']))
 			analytic_obj = self.env['account.analytic.account'].browse(vals['analytic_id'])
 			for record_acc in analytic_obj.product_budget_lines:
-				if analytic_obj.product_budget_lines:
+				if record_acc.product_budget_lines:
 					for record_job in list_of_objects:
 						log.warning('{} == {}'.format(record_job[-1]['group_product_id'],record_acc['group_product_id'].id))
 						if record_job[-1]['group_product_id'] == record_acc['group_product_id'].id:
 							log.warning('{} > {}'.format(record_job[-1]['total_cost'],record_acc['planned_amount']))
 							if record_job[-1]['total_cost'] > record_acc['planned_amount']:
-								raise Warning("{} exceeded! {} (job cost sheet) > {} (account.analytic)".format(record_job['group_product_id'].name,record_job[-1]['total_cost'],record_acc['planned_amount']))
+								raise Warning("{} exceeded! {} (job cost sheet) > {} (account.analytic)".format(record_acc.group_product_id.name,record_job[-1]['total_cost'],record_acc['planned_amount']))
 				else:
 					raise Warning('No budget lines found!')
 
