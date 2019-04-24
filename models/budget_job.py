@@ -110,6 +110,7 @@ class job_costing_planned_amount_comparison(models.Model):
 
 	@api.multi
 	def write(self,vals):
+		log.critical('self = {}'.format(self))
 		log.critical('vals = {}'.format(vals))
 		list_of_objects = []
 		new_vals = {}
@@ -139,17 +140,29 @@ class job_costing_planned_amount_comparison(models.Model):
 					has_no_group = False
 					for rec in list_of_objects:
 						if rec[-1]['group_product_id'] == rec2[-1]['group_product_id']:
-							rec[-1]['total_cost'] += (rec2[-1]['hours'] * rec2[-1]['uom_qty'] * rec2[-1]['cost_price'])
+							cost_price = rec2[-1].get('cost_price') or self.env['job.cost.line'].browse(rec2[1]).cost_price
+							uom_qty = rec2[-1].get('uom_qty') or self.env['job.cost.line'].browse(rec2[1]).uom_qty
+							hours = rec2[-1].get('hours') or self.env['job.cost.line'].browse(rec2[1]).hours
+
+							rec[-1]['total_cost'] += (hours * uom_qty * cost_price)
 							has_no_group = False
 						else:
 							has_no_group = True
 					if has_no_group:
-						rec2[-1]['total_cost'] = (rec2[-1]['hours'] * rec2[-1]['uom_qty'] * rec2[-1]['cost_price'])
+						cost_price = rec2[-1].get('cost_price') or self.env['job.cost.line'].browse(rec2[1]).cost_price
+						uom_qty = rec2[-1].get('uom_qty') or self.env['job.cost.line'].browse(rec2[1]).uom_qty
+						hours = rec2[-1].get('hours') or self.env['job.cost.line'].browse(rec2[1]).hours
+
+						rec2[-1]['total_cost'] = (hours * uom_qty * cost_price)
 						list_of_objects.append(rec2)
 
 			else:
 				for record in new_vals['job_labour_line_ids']:
-					record[-1]['total_cost'] = (record[-1]['hours'] * record[-1]['uom_qty'] * record[-1]['cost_price'])
+					cost_price = record[-1].get('cost_price') or self.env['job.cost.line'].browse(record[1]).cost_price
+					uom_qty = record[-1].get('uom_qty') or self.env['job.cost.line'].browse(record[1]).uom_qty
+					hours = record[-1].get('hours') or self.env['job.cost.line'].browse(record[1]).hours
+					
+					record[-1]['total_cost'] = (hours * uom_qty * record)
 				list_of_objects = new_vals['job_labour_line_ids']
 			log.critical('list_of_objects = {}'.format(list_of_objects))
 		if new_vals.get('job_subcon_line_ids'):
@@ -159,16 +172,22 @@ class job_costing_planned_amount_comparison(models.Model):
 					has_no_group = False
 					for rec in list_of_objects:
 						if rec[-1]['group_product_id'] == rec2[-1]['group_product_id']:
-							rec[-1]['total_cost'] += (rec2[-1]['cost_price'] * rec2[-1]['product_qty'])
+							cost_price = rec2[-1].get('cost_price') or self.env['job.cost.line'].browse(rec2[1]).cost_price
+							product_qty = rec2[-1].get('product_qty') or self.env['job.cost.line'].browse(rec2[1]).product_qty
+							rec[-1]['total_cost'] += (cost_price * product_qty)
 							has_no_group = False
 						else:
 							has_no_group = True
 					if has_no_group:
-						rec2[-1]['total_cost'] = (rec2[-1]['cost_price'] * rec2[-1]['product_qty'])
+						cost_price = rec2[-1].get('cost_price') or self.env['job.cost.line'].browse(rec2[1]).cost_price
+						product_qty = rec2[-1].get('product_qty') or self.env['job.cost.line'].browse(rec2[1]).product_qty
+						rec2[-1]['total_cost'] = (cost_price * product_qty)
 						list_of_objects.append(rec2)
 			else:
 				for record in new_vals['job_subcon_line_ids']:
-					record[-1]['total_cost'] = (record[-1]['cost_price'] * record[-1]['product_qty'])
+					cost_price = record[-1].get('cost_price') or self.env['job.cost.line'].browse(record[1]).cost_price
+					product_qty = record[-1].get('product_qty') or self.env['job.cost.line'].browse(record[1]).product_qty
+					record[-1]['total_cost'] = cost_price * product_qty
 				list_of_objects = new_vals['job_subcon_line_ids']
 			
 			log.critical('list_of_objects = {}'.format(list_of_objects))
@@ -179,16 +198,22 @@ class job_costing_planned_amount_comparison(models.Model):
 					has_no_group = False
 					for rec in list_of_objects:
 						if rec[-1]['group_product_id'] == rec2[-1]['group_product_id']:
-							rec[-1]['total_cost'] += (rec2[-1]['cost_price'] * rec2[-1]['product_qty'])
+							cost_price = rec2[-1].get('cost_price') or self.env['job.cost.line'].browse(rec2[1]).cost_price
+							product_qty = rec2[-1].get('product_qty') or self.env['job.cost.line'].browse(rec2[1]).product_qty
+							rec[-1]['total_cost'] += (cost_price * product_qty)
 							has_no_group = False
 						else:
 							has_no_group = True
 					if has_no_group:
-						rec2[-1]['total_cost'] = (rec2[-1]['cost_price'] * rec2[-1]['product_qty'])
+						cost_price = rec2[-1].get('cost_price') or self.env['job.cost.line'].browse(rec2[1]).cost_price
+						product_qty = rec2[-1].get('product_qty') or self.env['job.cost.line'].browse(rec2[1]).product_qty
+						rec2[-1]['total_cost'] = (cost_price * product_qty)
 						list_of_objects.append(rec2)
 			else:
 				for record in new_vals['job_subcon_line_ids']:
-					record[-1]['total_cost'] = (record[-1]['cost_price'] * record[-1]['product_qty'])
+					cost_price = record[-1].get('cost_price') or self.env['job.cost.line'].browse(record[1]).cost_price
+					product_qty = record[-1].get('product_qty') or self.env['job.cost.line'].browse(record[1]).product_qty
+					record[-1]['total_cost'] = cost_price * product_qty
 				list_of_objects = new_vals['job_overhead_line_ids']
 			
 			log.critical('list_of_objects = {}'.format(list_of_objects))
