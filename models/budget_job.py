@@ -115,11 +115,10 @@ class job_costing_planned_amount_comparison(models.Model):
 		new_vals = []
 
 		list_of_table_name = ['job_cost_line_ids','job_labour_line_ids','job_subcon_line_ids','job_overhead_line_ids']
-		for sheet in vals:
-			for x in list_of_table_name:
-				for record in sheet:
-					if record[-1] != False:
-						new_vals.append(record)
+		for x in list_of_table_name:
+			for record in vals:
+				if record[-1] != False:
+					new_vals.append(record)
 
 		log.critical('new_vals = {}'.format(new_vals))
 		if new_vals.get('job_cost_line_ids'):
