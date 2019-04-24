@@ -120,7 +120,7 @@ class job_costing_planned_amount_comparison(models.Model):
 			for record in new_vals.get(x):
 				if record[-1] == False:
 					record.pop(num)
-				num++
+				num += 1
 
 		log.critical('new_vals = {}'.format(new_vals))
 		if new_vals.get('job_cost_line_ids'):
