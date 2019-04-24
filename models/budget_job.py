@@ -210,7 +210,7 @@ class job_costing_planned_amount_comparison(models.Model):
 						rec2[-1]['total_cost'] = (cost_price * product_qty)
 						list_of_objects.append(rec2)
 			else:
-				for record in new_vals['job_subcon_line_ids']:
+				for record in new_vals['job_overhead_line_ids']:
 					cost_price = record[-1].get('cost_price') or self.env['job.cost.line'].browse(record[1]).cost_price
 					product_qty = record[-1].get('product_qty') or self.env['job.cost.line'].browse(record[1]).product_qty
 					record[-1]['total_cost'] = cost_price * product_qty
