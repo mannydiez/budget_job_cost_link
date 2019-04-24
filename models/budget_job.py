@@ -161,7 +161,7 @@ class job_costing_planned_amount_comparison(models.Model):
 					cost_price = record[-1].get('cost_price') or self.env['job.cost.line'].browse(record[1]).cost_price
 					uom_qty = record[-1].get('uom_qty') or self.env['job.cost.line'].browse(record[1]).uom_qty
 					hours = record[-1].get('hours') or self.env['job.cost.line'].browse(record[1]).hours
-					
+
 					record[-1]['total_cost'] = (hours * uom_qty * record)
 				list_of_objects = new_vals['job_labour_line_ids']
 			log.critical('list_of_objects = {}'.format(list_of_objects))
@@ -218,7 +218,7 @@ class job_costing_planned_amount_comparison(models.Model):
 			
 			log.critical('list_of_objects = {}'.format(list_of_objects))
 
-		if new_vals.get('analytic_id'):
+		if new_vals.get('analytic_id') or self.analytic_id:
 			log.critical('analytic_id = {}'.format(new_vals['analytic_id']))
 			analytic_obj = self.env['account.analytic.account'].browse(new_vals['analytic_id'])
 			for record_job in list_of_objects:
