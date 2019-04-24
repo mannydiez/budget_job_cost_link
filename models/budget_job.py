@@ -220,7 +220,10 @@ class job_costing_planned_amount_comparison(models.Model):
 		analytic_ids = new_vals.get('analytic_id') or self.analytic_id
 		if analytic_ids:
 			log.critical('analytic_id = {}'.format(analytic_ids))
-			analytic_obj = self.env['account.analytic.account'].browse(analytic_ids)
+			if type(analytic_ids) == type(self):
+				analytic_obj = analytic_ids
+			else:
+				analytic_obj = self.env['account.analytic.account'].browse(analytic_ids)
 			for record_job in list_of_objects:
 				has_no_group = False
 				name = False
