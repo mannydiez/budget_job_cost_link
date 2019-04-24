@@ -118,7 +118,7 @@ class job_costing_planned_amount_comparison(models.Model):
 		for x in list_of_table_name:
 			for record in new_vals.get(x):
 				if record[-1] == False:
-					new_vals.remove(record)
+					record.remove(record)
 
 		log.critical('new_vals = {}'.format(new_vals))
 		if new_vals.get('job_cost_line_ids'):
