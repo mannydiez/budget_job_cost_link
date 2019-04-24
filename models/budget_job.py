@@ -82,21 +82,21 @@ class job_costing_planned_amount_comparison(models.Model):
 		if vals.get('analytic_id'):
 			log.critical('analytic_id = {}'.format(vals['analytic_id']))
 			analytic_obj = self.env['account.analytic.account'].browse(vals['analytic_id'])
-			for record_acc in analytic_obj.product_budget_lines:
+			for record_job in list_of_objects:
 				has_no_group = False
 				name = False
 				if analytic_obj.product_budget_lines:
-					for record_job in list_of_objects:
+					for record_acc in analytic_obj.product_budget_lines:
+						name = record_job[-1]['description']
 						log.warning('{} == {}'.format(record_job[-1]['group_product_id'],record_acc['group_product_id'].id))
 						if record_job[-1]['group_product_id'] == record_acc['group_product_id'].id:
 							log.warning('{} > {}'.format(record_job[-1]['total_cost'],record_acc['planned_amount']))
 							if record_job[-1]['total_cost'] > record_acc['planned_amount']:
-								raise Warning("{} exceeded!".format(record_acc.group_product_id.name))
+								raise Warning("{} exceeded!".format(name))
 							has_no_group = False
 							break
 						else:
 							has_no_group = True
-							name = record_job[-1]['description']
 					if has_no_group:
 						raise Warning("{} does not have a budget line".format(name))
 				else:
@@ -179,21 +179,21 @@ class job_costing_planned_amount_comparison(models.Model):
 		if vals.get('analytic_id'):
 			log.critical('analytic_id = {}'.format(vals['analytic_id']))
 			analytic_obj = self.env['account.analytic.account'].browse(vals['analytic_id'])
-			for record_acc in analytic_obj.product_budget_lines:
+			for record_job in list_of_objects:
 				has_no_group = False
 				name = False
 				if analytic_obj.product_budget_lines:
-					for record_job in list_of_objects:
+					for record_acc in analytic_obj.product_budget_lines:
+						name = record_job[-1]['description']
 						log.warning('{} == {}'.format(record_job[-1]['group_product_id'],record_acc['group_product_id'].id))
 						if record_job[-1]['group_product_id'] == record_acc['group_product_id'].id:
 							log.warning('{} > {}'.format(record_job[-1]['total_cost'],record_acc['planned_amount']))
 							if record_job[-1]['total_cost'] > record_acc['planned_amount']:
-								raise Warning("{} exceeded!".format(record_acc.group_product_id.name))
+								raise Warning("{} exceeded!".format(name))
 							has_no_group = False
 							break
 						else:
 							has_no_group = True
-							name = record_job[-1]['description']
 					if has_no_group:
 						raise Warning("{} does not have a budget line".format(name))
 				else:
