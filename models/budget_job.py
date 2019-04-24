@@ -157,7 +157,7 @@ class job_costing_planned_amount_comparison(models.Model):
 							if record_job['group_product_id'].id == record_acc['group_product_id'].id:
 								log.warning('{} > {}'.format(record_job['total_cost'],record_acc['planned_amount']))
 								if record_job['total_cost'] > record_acc['planned_amount']:
-									raise Warning("{} exceeded!".format(name))
+									raise Warning("{} exceeded!".format(record_job['group_product_id'].name))
 								has_no_group = False
 								break
 							else:
