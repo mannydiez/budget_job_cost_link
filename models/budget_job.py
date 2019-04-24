@@ -126,16 +126,25 @@ class job_costing_planned_amount_comparison(models.Model):
 		list_of_table_name = ['job_cost_line_ids','job_labour_line_ids','job_subcon_line_ids','job_overhead_line_ids']
 		for record in self:
 			for table in list_of_table_name:
+				log.critical('record[table] = {}'.format(record[table]))
 				if record[table]:
 					for rec in record[table]:
+						log.warning('rec = {}'.format(rec))
 						has_no_group = False
-						for obj in list_of_objects:
-							if obj['group_product_id'].id == rec.group_product_id.id:
-								obj['total_cost'] += rec.total_cost
-								has_no_group = False
-							else:
-								has_no_group = True
+						if list_of_objects:
+							for obj in list_of_objects:
+								log.warning('obj = {}'.format(obj))
+								log.warning('{} = {}'.format(obj['group_product_id'].id,rec.group_product_id.id))
+
+								if obj['group_product_id'].id == rec.group_product_id.id:
+									obj['total_cost'] += rec.total_cost
+									has_no_group = False
+								else:
+									has_no_group = True
+						else:
+							has_no_group = True
 						if has_no_group:
+							log.warning('has_no_group = {}'.format(has_no_group))
 							list_of_objects.append({'group_product_id':rec.group_product_id,'total_cost':rec.total_cost})
 							
 			log.critical('list_of_objects = {}'.format(list_of_objects))
