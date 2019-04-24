@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
  
-from odoo import api, fields, models
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, ValidationError
 import logging 
 log = logging.getLogger(__name__)
 
@@ -95,15 +96,15 @@ class job_costing_planned_amount_comparison(models.Model):
 						if record_job[-1]['group_product_id'] == record_acc['group_product_id'].id:
 							log.warning('{} > {}'.format(record_job[-1]['total_cost'],record_acc['planned_amount']))
 							if record_job[-1]['total_cost'] > record_acc['planned_amount']:
-								raise Warning("{} exceeded!".format(name))
+								raise UserError(_("{} exceeded!".format(name)))
 							has_no_group = False
 							break
 						else:
 							has_no_group = True
 					if has_no_group:
-						raise Warning("{} does not have a budget line".format(name))
+						raise UserError(_("{} does not have a budget line".format(name)))
 				else:
-					raise Warning('No budget lines found!')
+					raise UserError(_('No budget lines found!'))
 
 		res = super(job_costing_planned_amount_comparison,self).create(vals)
 		return res
@@ -111,30 +112,30 @@ class job_costing_planned_amount_comparison(models.Model):
 	@api.multi
 	def write(self,vals):
 
-		log.critical('vals = {}'.format(vals))
-		log.critical('self.job_cost_line_ids = {}'.format(self.job_cost_line_ids))
-		log.critical('self.job_labour_line_ids = {}'.format(self.job_labour_line_ids))
-		log.critical('self.job_subcon_line_ids = {}'.format(self.job_subcon_line_ids))
-		log.critical('self.job_overhead_line_ids = {}'.format(self.job_overhead_line_ids))
+		# log.critical('vals = {}'.format(vals))
+		# log.critical('self.job_cost_line_ids = {}'.format(self.job_cost_line_ids))
+		# log.critical('self.job_labour_line_ids = {}'.format(self.job_labour_line_ids))
+		# log.critical('self.job_subcon_line_ids = {}'.format(self.job_subcon_line_ids))
+		# log.critical('self.job_overhead_line_ids = {}'.format(self.job_overhead_line_ids))
 		res = super(job_costing_planned_amount_comparison,self).write(vals)
-		log.critical('res = {}'.format(res))
-		log.critical('self.job_cost_line_ids = {}'.format(self.job_cost_line_ids))
-		log.critical('self.job_labour_line_ids = {}'.format(self.job_labour_line_ids))
-		log.critical('self.job_subcon_line_ids = {}'.format(self.job_subcon_line_ids))
-		log.critical('self.job_overhead_line_ids = {}'.format(self.job_overhead_line_ids))
+		# log.critical('res = {}'.format(res))
+		# log.critical('self.job_cost_line_ids = {}'.format(self.job_cost_line_ids))
+		# log.critical('self.job_labour_line_ids = {}'.format(self.job_labour_line_ids))
+		# log.critical('self.job_subcon_line_ids = {}'.format(self.job_subcon_line_ids))
+		# log.critical('self.job_overhead_line_ids = {}'.format(self.job_overhead_line_ids))
 		list_of_objects = []
 		list_of_table_name = ['job_cost_line_ids','job_labour_line_ids','job_subcon_line_ids','job_overhead_line_ids']
 		for record in self:
 			for table in list_of_table_name:
-				log.critical('record[table] = {}'.format(record[table]))
+				# log.critical('record[table] = {}'.format(record[table]))
 				if record[table]:
 					for rec in record[table]:
-						log.warning('rec = {}'.format(rec))
+						# log.warning('rec = {}'.format(rec))
 						has_no_group = False
 						if list_of_objects:
 							for obj in list_of_objects:
-								log.warning('obj = {}'.format(obj))
-								log.warning('{} = {}'.format(obj['group_product_id'].id,rec.group_product_id.id))
+								# log.warning('obj = {}'.format(obj))
+								# log.warning('{} = {}'.format(obj['group_product_id'].id,rec.group_product_id.id))
 
 								if obj['group_product_id'].id == rec.group_product_id.id:
 									obj['total_cost'] += rec.total_cost
@@ -144,28 +145,30 @@ class job_costing_planned_amount_comparison(models.Model):
 						else:
 							has_no_group = True
 						if has_no_group:
-							log.warning('has_no_group = {}'.format(has_no_group))
+							# log.warning('has_no_group = {}'.format(has_no_group))
 							list_of_objects.append({'group_product_id':rec.group_product_id,'total_cost':rec.total_cost})
 							
-			log.critical('list_of_objects = {}'.format(list_of_objects))
+			# log.critical('list_of_objects = {}'.format(list_of_objects))
 			if record.analytic_id:
 				for record_job in list_of_objects:
 					has_no_group = False
 					if record.analytic_id.product_budget_lines:
 						for record_acc in record.analytic_id.product_budget_lines:
-							log.warning('{} == {}'.format(record_job['group_product_id'].id,record_acc['group_product_id'].id))
+							# log.warning('{} == {}'.format(record_job['group_product_id'].id,record_acc['group_product_id'].id))
 							if record_job['group_product_id'].id == record_acc['group_product_id'].id:
-								log.warning('{} > {}'.format(record_job['total_cost'],record_acc['planned_amount']))
+								# log.warning('{} > {}'.format(record_job['total_cost'],record_acc['planned_amount']))
 								if record_job['total_cost'] > record_acc['planned_amount']:
-									raise Warning("{} exceeded!".format(record_job['group_product_id'].name))
+									raise UserError(_("{} exceeded!".format(record_job['group_product_id'].name)))
 								has_no_group = False
 								break
 							else:
 								has_no_group = True
 						if has_no_group:
-							raise Warning("{} does not have a budget line".format(record_job['group_product_id'].name))
+							# raise Warning("{} does not have a budget line".format(record_job['group_product_id'].name))
+							raise UserError(_('{} does not have a budget line'.format(record_job['group_product_id'].name)))
 					else:
-						raise Warning('No budget lines found!')
+						# raise Warning('No budget lines found!')
+						raise UserError(_('No budget lines found!'))
 		return res
 
 	# @api.multi
