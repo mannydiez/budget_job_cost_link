@@ -33,6 +33,7 @@ class job_costing_planned_amount_comparison(models.Model):
 						else:
 							has_no_group = True
 					if has_no_group:
+						rec2[-1]['total_cost'] = (rec2[-1]['hours'] * rec2[-1]['uom_qty'] * rec2[-1]['cost_price'])
 						list_of_objects.append(rec2)
 
 			else:
@@ -52,6 +53,7 @@ class job_costing_planned_amount_comparison(models.Model):
 						else:
 							has_no_group = True
 					if has_no_group:
+						rec2[-1]['total_cost'] = (rec2[-1]['cost_price'] * rec2[-1]['product_qty'])
 						list_of_objects.append(rec2)
 			else:
 				for record in vals['job_subcon_line_ids']:
@@ -71,6 +73,7 @@ class job_costing_planned_amount_comparison(models.Model):
 						else:
 							has_no_group = True
 					if has_no_group:
+						rec2[-1]['total_cost'] = (rec2[-1]['cost_price'] * rec2[-1]['product_qty'])
 						list_of_objects.append(rec2)
 			else:
 				for record in vals['job_subcon_line_ids']:
@@ -130,6 +133,7 @@ class job_costing_planned_amount_comparison(models.Model):
 						else:
 							has_no_group = True
 					if has_no_group:
+						rec2[-1]['total_cost'] = (rec2[-1]['hours'] * rec2[-1]['uom_qty'] * rec2[-1]['cost_price'])
 						list_of_objects.append(rec2)
 
 			else:
@@ -149,6 +153,7 @@ class job_costing_planned_amount_comparison(models.Model):
 						else:
 							has_no_group = True
 					if has_no_group:
+						rec2[-1]['total_cost'] = (rec2[-1]['cost_price'] * rec2[-1]['product_qty'])
 						list_of_objects.append(rec2)
 			else:
 				for record in vals['job_subcon_line_ids']:
@@ -168,6 +173,7 @@ class job_costing_planned_amount_comparison(models.Model):
 						else:
 							has_no_group = True
 					if has_no_group:
+						rec2[-1]['total_cost'] = (rec2[-1]['cost_price'] * rec2[-1]['product_qty'])
 						list_of_objects.append(rec2)
 			else:
 				for record in vals['job_subcon_line_ids']:
