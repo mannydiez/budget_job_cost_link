@@ -217,10 +217,10 @@ class job_costing_planned_amount_comparison(models.Model):
 				list_of_objects = new_vals['job_overhead_line_ids']
 			
 			log.critical('list_of_objects = {}'.format(list_of_objects))
-
-		if new_vals.get('analytic_id') or self.analytic_id:
-			# log.critical('analytic_id = {}'.format(new_vals['analytic_id']))
-			analytic_obj = self.env['account.analytic.account'].browse(new_vals['analytic_id'])
+		analytic_ids = new_vals.get('analytic_id') or self.analytic_id
+		if analytic_ids:
+			log.critical('analytic_id = {}'.format(analytic_ids))
+			analytic_obj = self.env['account.analytic.account'].browse(analytic_ids)
 			for record_job in list_of_objects:
 				has_no_group = False
 				name = False
